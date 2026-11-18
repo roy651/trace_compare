@@ -38,8 +38,8 @@ def deep_equal(x, y):
     ):
         return x == y
 
-    if isinstance(x, bool) and isinstance(y, bool):
-        return x == y
+    if isinstance(x, bool) or isinstance(y, bool):
+        return isinstance(x, bool) and isinstance(y, bool) and x == y
 
     if isinstance(x, str) and isinstance(y, str):
         return x.strip() == y.strip()

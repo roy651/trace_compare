@@ -213,7 +213,7 @@ def perform_trace_comparison(
                         if step1:
                             current_successful_output = step1.llm_output_structured
 
-            if current_failed_output is None or current_failed_output == "" or current_failed_output == []:
+            if not current_failed_output:
                 report += "Output of failed trace is empty\n\n"
 
             if current_successful_output and current_failed_output:

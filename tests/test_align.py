@@ -62,6 +62,15 @@ def test_empty_failed_output_is_compared_against_the_retry():
     assert "Failed trace: x" in result.report
 
 
+def test_empty_failed_output_is_reported():
+    successful = trace(("Executor", {"tool": "x"}), ("Verifier", {"ok": 1}))
+    failed = trace(("Executor", {}), ("Verifier", {"ok": 1}))
+
+    result = perform_trace_comparison(RULES, successful, failed)
+
+    assert "Output of failed trace is empty\n\n" in result.report
+
+
 def test_field_exists_detects_a_field_present_on_one_side_only():
     report, different = perform_step_comparison(
         RULES["Verifier"]["fields"], {"status": "ok"}, {"status": "ok", "issues": ["late"]}, False, "Verifier"

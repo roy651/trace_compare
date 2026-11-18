@@ -27,10 +27,11 @@ class TestExactMatch:
         assert deep_equal([{"app": "x", "tags": [1, 2]}], [{"tags": [2, 1], "app": " x"}])
         assert not deep_equal([{"app": "x"}], [{"app": "x", "extra": 1}])
 
-    def test_numbers_compare_by_value_and_bool_falls_back_to_python_equality(self):
+    def test_numbers_compare_by_value_and_bool_never_equals_a_number(self):
         assert deep_equal(1, 1.0)
-        assert deep_equal(True, 1)
-        assert not deep_equal(True, 2)
+        assert deep_equal(True, True)
+        assert not deep_equal(True, 1)
+        assert not deep_equal(0, False)
 
     def test_none_equals_only_none(self):
         assert deep_equal(None, None)

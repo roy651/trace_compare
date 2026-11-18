@@ -17,10 +17,7 @@ def parse_rule(agent_name: str, llm_output: str) -> dict[str, Any]:
     """Build one rules entry from the model's answer. An unparseable answer yields empty fields."""
     rule: dict[str, Any] = {"agent_name": agent_name}
 
-    if llm_output[0:7] == "```json":
-        llm_output = llm_output[7:]
-    if llm_output[-3:] == "```":
-        llm_output = llm_output[:-3]
+    llm_output = llm_output.strip().removeprefix("```json").removesuffix("```")
 
     try:
         parsed = json.loads(llm_output)
