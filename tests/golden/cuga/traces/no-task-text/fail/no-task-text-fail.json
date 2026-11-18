@@ -1,0 +1,103 @@
+{
+ "id": "no-task-text-fail",
+ "observations": [
+  {
+   "id": "no-task-text-fail-span",
+   "type": "SPAN",
+   "name": "graph",
+   "startTime": "2026-04-01T02:30:00Z"
+  },
+  {
+   "id": "no-task-text-fail-gen-1",
+   "type": "GENERATION",
+   "name": "task_analyzer",
+   "startTime": "2026-04-01T02:30:01Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are an AI assistant whose primary goal is to determine which applications are required to fulfill a user's request. You will be given two inputs:\n1.  `intent`: A string describing what the user wants to achieve.\n2.  `available_apps`: A list of JSON objects, where each object represents an application. Each application object has a `name` (string) and an optional `description` (string).\n\nYour t"
+    },
+    {
+     "role": "user",
+     "content": "..."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"thoughts\": \"Checking which apps are needed.\", \"relevant_apps\": [\"spotify\"]}"
+   },
+   "metadata": {
+    "langgraph_node": "task_analyzer"
+   }
+  },
+  {
+   "id": "no-task-text-fail-gen-2",
+   "type": "GENERATION",
+   "name": "task_decomposition",
+   "startTime": "2026-04-01T02:30:02Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are an expert in **task decomposition**. Your role is to break down a user's intent into high-level subtasks, considering the application(s) involved, which can be web-based or service-based. You'll receive the user's intent expressed in natural language and a list of applications, each with a **name**, an optional **URL** (for web applications), and a **description**. Each subtask you generat"
+    },
+    {
+     "role": "user",
+     "content": "..."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"thoughts\": \"Split by app.\", \"task_decomposition\": [{\"task\": \"Find the song played the most\", \"type\": \"api\", \"app\": \"spotify\"}]}"
+   },
+   "metadata": {
+    "langgraph_node": "task_decomposition"
+   }
+  },
+  {
+   "id": "no-task-text-fail-gen-3",
+   "type": "GENERATION",
+   "name": "plan_controller",
+   "startTime": "2026-04-01T02:30:03Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "As a plan controller agent, your role is to track the progress of a planner agent, given its intent, current URL, the history of subtasks and variables, and the subtasks that need to be performed.\n\n**Input**:\n1.  **Previous Subtasks**: History of subtasks performed by the planner. Each subtask description will include its type ('web' or 'api') and the application context (e.g., URL for 'web', app "
+    },
+    {
+     "role": "user",
+     "content": "..."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"thoughts\": [\"Tracking progress.\"], \"subtasks_progress\": [\"in-progress\"], \"next_subtask\": \"Find the most played song\", \"next_subtask_type\": \"api\", \"next_subtask_app\": \"spotify\", \"conclude_task\": false, \"conclude_final_answer\": \"\"}"
+   },
+   "metadata": {
+    "langgraph_node": "plan_controller"
+   }
+  },
+  {
+   "id": "no-task-text-fail-gen-4",
+   "type": "GENERATION",
+   "name": "final_answer",
+   "startTime": "2026-04-01T02:30:04Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You're an AI assistant that processes user intents and the corresponding system answers. Your task is to analyze the input and then provide a single, valid JSON object as your response. This JSON object must contain your reasoning (`thoughts`), the determined output value (`final_answer`), and the Python data type of that value (`final_answer_type`), with `thoughts` being the first key in the JSON"
+    },
+    {
+     "role": "user",
+     "content": "..."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"thoughts\": [\"Done.\"], \"final_answer\": \"Unknown\", \"final_answer_type\": \"str\"}"
+   },
+   "metadata": {
+    "langgraph_node": "final_answer"
+   }
+  }
+ ]
+}

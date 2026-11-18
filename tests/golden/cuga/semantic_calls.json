@@ -1,0 +1,64 @@
+[
+ {
+  "successful": [
+   "Find the most played song"
+  ],
+  "failed": [
+   "Find the song played the most"
+  ],
+  "similar": true
+ },
+ {
+  "successful": "Find the most played song",
+  "failed": "Find the most played song",
+  "similar": true
+ },
+ {
+  "successful": [
+   "Count the songs across all playlists"
+  ],
+  "failed": [
+   "Count all the songs in the playlists"
+  ],
+  "similar": true
+ },
+ {
+  "successful": "Count songs in every playlist",
+  "failed": "Count the liked songs",
+  "similar": false
+ },
+ {
+  "successful": "I will list the user's playlists and count the songs.",
+  "failed": "Counting only liked songs.",
+  "similar": false
+ },
+ {
+  "successful": "The code returned 42 songs across all playlists, which answers the task.",
+  "failed": "The code counted liked songs (17) instead of playlist songs.",
+  "similar": false
+ },
+ {
+  "successful": "Conclude the task and report 42.",
+  "failed": "Report 17 as the answer.",
+  "similar": false
+ },
+ {
+  "successful": "Report the total",
+  "failed": "Report the total",
+  "similar": true
+ },
+ {
+  "successful": [
+   "Send 25 dollars to Alex"
+  ],
+  "failed": [
+   "Send 25 dollars to Alex"
+  ],
+  "similar": true
+ },
+ {
+  "successful": "Sending the payment now.",
+  "failed": "",
+  "similar": false
+ }
+]
