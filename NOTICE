@@ -1,0 +1,19 @@
+trace-compare
+Reference implementation for "Trace Comparison for Actionable Diagnostics and
+Improvement of Agentic Systems".
+
+This repository contains code derived from the following projects, both
+Copyright 2025 CUGA and licensed under the Apache License, Version 2.0:
+
+  cuga-eval   https://github.com/cuga-project/cuga-eval
+    The comparison analytics under analytics/trace_comparison_rules/ is the
+    source of the code in src/trace_compare/ and of the comparison rules in
+    examples/cuga_appworld/.
+
+  cuga-agent  https://github.com/cuga-project/cuga-agent
+    The component system prompts in examples/cuga_appworld/prompts/ originate
+    from the CUGA agent.
+
+Changes made to the derived files: restructured into an installable package,
+removed the dependency on the cuga-eval bundle layout, and added a command-line
+interface, a structured divergence output, a synthetic example and tests.

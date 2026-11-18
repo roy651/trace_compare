@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "trace-compare: reference implementation of comparison analytics for agentic systems"
+type: software
+license: Apache-2.0
+authors:
+  - family-names: Zeltyn
+    given-names: Sergey
+  - family-names: Shoham
+    given-names: Iftach
+  - family-names: Moshkovich
+    given-names: Dany
+  - family-names: Levy
+    given-names: Ido
+  - family-names: Skarbovsky
+    given-names: Inna
+  - family-names: Abitbol
+    given-names: Roy
+  - family-names: Shlomov
+    given-names: Segev
+preferred-citation:
+  type: conference-paper
+  title: "Trace Comparison for Actionable Diagnostics and Improvement of Agentic Systems"
+  authors:
+    - family-names: Zeltyn
+      given-names: Sergey
+    - family-names: Shoham
+      given-names: Iftach
+    - family-names: Moshkovich
+      given-names: Dany
+    - family-names: Levy
+      given-names: Ido
+    - family-names: Skarbovsky
+      given-names: Inna
+    - family-names: Abitbol
+      given-names: Roy
+    - family-names: Shlomov
+      given-names: Segev
+  collection-title: "Proceedings of the AAAI Conference on Artificial Intelligence (IAAI track)"
+  status: in-press
