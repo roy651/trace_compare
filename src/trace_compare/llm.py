@@ -1,7 +1,10 @@
 """Single-call LLM client over LiteLLM. Any LiteLLM model string works.
 
-When LITELLM_API_KEY and LITELLM_BASE_URL are both set, calls go to that LiteLLM proxy
-as an OpenAI-compatible endpoint and the model name is passed through unchanged.
+Credentials, in order of precedence:
+- LLM_BASE_URL (with LLM_API_KEY): calls go to that OpenAI-compatible endpoint (a gateway, a
+  proxy, a local server) and the model name is passed through unchanged.
+- LLM_API_KEY alone: the key is sent to the provider named by the model string.
+- Neither: the provider's own variables apply (ANTHROPIC_API_KEY, OPENAI_API_KEY, ...).
 """
 
 import os
@@ -44,14 +47,13 @@ class LLMClient:
         if self.seed is not None:
             completion_args["seed"] = self.seed
 
-        proxy_key = os.getenv("LITELLM_API_KEY")
-        proxy_base = os.getenv("LITELLM_BASE_URL")
-        if proxy_key and proxy_base:
-            completion_args["api_key"] = proxy_key
-            completion_args["base_url"] = proxy_base
+        api_key = os.getenv("LLM_API_KEY")
+        base_url = os.getenv("LLM_BASE_URL")
+        if api_key:
+            completion_args["api_key"] = api_key
+        if base_url:
+            completion_args["base_url"] = base_url
             completion_args["custom_llm_provider"] = "openai"
-        elif proxy_key:
-            completion_args["api_key"] = proxy_key
 
         response = litellm.completion(**completion_args)
 

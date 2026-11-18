@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 import sys
 import tempfile
 from datetime import datetime, timezone
@@ -86,7 +87,9 @@ def print_divergence_table(records: list[dict]) -> None:
 
 def run_demo(args) -> None:
     if not TOY_AGENT_DIR.is_dir():
-        sys.exit("The demo uses examples/toy_agent from the trace-compare repository; clone it and run from there.")
+        sys.exit(
+            "The demo uses examples/toy_agent from the trace-compare repository; clone it and run from there: https://github.com/roy651/trace_compare"
+        )
 
     out_dir = Path(args.out) if args.out else Path(tempfile.mkdtemp(prefix="trace-compare-demo-"))
     records = compare(TOY_AGENT_DIR / "traces", TOY_AGENT_DIR, out_dir)
@@ -112,13 +115,20 @@ def run_compare(args) -> None:
         print(f"Wrote {out_dir / name}")
 
 
+def resolve_model(args) -> str:
+    model = args.model or os.getenv("LLM_MODEL")
+    if not model:
+        sys.exit("No model given. Pass --model or set LLM_MODEL (any LiteLLM model string).")
+    return model
+
+
 def run_design_rules(args) -> None:
     from trace_compare.design_rules import design_rules
 
     agent_dir = Path(args.agent)
     if (agent_dir / RULES_FILE).exists() and not args.force:
         sys.exit(f"{agent_dir / RULES_FILE} exists. Pass --force to overwrite it.")
-    print(f"Wrote {design_rules(agent_dir, args.model)}")
+    print(f"Wrote {design_rules(agent_dir, resolve_model(args))}")
 
 
 def run_diagnose(args) -> None:
@@ -126,7 +136,7 @@ def run_diagnose(args) -> None:
 
     report_path = Path(args.report)
     out_path = Path(args.out) if args.out else report_path.parent / "summary.md"
-    print(f"Wrote {diagnose(report_path, Path(args.agent), args.model, out_path)}")
+    print(f"Wrote {diagnose(report_path, Path(args.agent), resolve_model(args), out_path)}")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -155,14 +165,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     design = commands.add_parser("design-rules", help="Generate rules.txt from the component prompts (LLM).")
     design.add_argument("--agent", required=True, help="Agent config directory with manifest.json.")
-    design.add_argument("--model", required=True, help="Any LiteLLM model string.")
+    design.add_argument("--model", help="Any LiteLLM model string (default: LLM_MODEL).")
     design.add_argument("--force", action="store_true", help="Overwrite an existing rules.txt.")
     design.set_defaults(handler=run_design_rules)
 
     diagnose_cmd = commands.add_parser("diagnose", help="Root-cause analysis of a step comparison report (LLM).")
     diagnose_cmd.add_argument("--report", required=True, help="Path to step_comparison.md.")
     diagnose_cmd.add_argument("--agent", required=True, help="Agent config directory with system_description.md.")
-    diagnose_cmd.add_argument("--model", required=True, help="Any LiteLLM model string.")
+    diagnose_cmd.add_argument("--model", help="Any LiteLLM model string (default: LLM_MODEL).")
     diagnose_cmd.add_argument("--out", help="Output file (default: summary.md next to the report).")
     diagnose_cmd.set_defaults(handler=run_diagnose)
 
