@@ -75,8 +75,30 @@ Different fields: selected_tools
 
 The same step-1 comparison finds the two `Planner` outputs worded differently
 (`"Book the cheapest Boston to Denver flight…"` vs `"Book cheapest flight Boston to Denver…"`) and
-correctly treats them as the same, because that field is compared by fuzzy match. The complete
-expected output is in [`examples/toy_agent/expected`](examples/toy_agent/expected).
+correctly treats them as the same, because that field is compared by fuzzy match.
+
+Up to here nothing called a model. The last stage hands the whole report to an LLM
+(`trace-compare diagnose`, see below), which returns clusters, root causes and proposed changes.
+Its first cluster for this report, from a run with Claude Opus 5:
+
+```text
+## ToolSelector drops the booking (write) tool from the selected tool set
+**Severity:** high
+
+In the majority of tasks the first divergence is in `ToolSelector.selected_tools`: the mutating
+booking tool (`flights.book`, `hotels.book`) is omitted while the search and payment tools are
+kept. Because the Executor may only call selected tools, the booking step becomes unexecutable,
+yet the payment step still runs.
+
+**Examples:**
+- Comparison 1 (Boston→Denver): `['flights.search','flights.book','payments.charge']` vs `['flights.search','payments.charge']`.
+- Comparison 2 (London→Tokyo): same omission of `flights.book`.
+- Comparison 5 (Louvre hotel): `hotels.book` omitted; only search + charge selected.
+```
+
+The complete outputs, including the [full diagnosis](examples/toy_agent/expected/summary.md), are in
+[`examples/toy_agent/expected`](examples/toy_agent/expected). The diagnosis is model output and
+varies between runs; the comparison report does not.
 
 ## How it works
 
