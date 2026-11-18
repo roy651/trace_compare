@@ -1,0 +1,145 @@
+{
+ "id": "flight-sea-sfo-fail-1",
+ "name": "travel-assistant",
+ "timestamp": "2026-05-01T14:15:00.000Z",
+ "input": [
+  {
+   "role": "user",
+   "content": "Find a flight from Seattle to San Francisco on 9 July and book it."
+  }
+ ],
+ "observations": [
+  {
+   "id": "flight-sea-sfo-fail-1-root",
+   "type": "SPAN",
+   "name": "travel-assistant",
+   "startTime": "2026-05-01T14:15:00.000Z",
+   "endTime": "2026-05-01T14:15:14.000Z"
+  },
+  {
+   "id": "flight-sea-sfo-fail-1-gen-1",
+   "type": "GENERATION",
+   "name": "Planner",
+   "model": "toy-model",
+   "startTime": "2026-05-01T14:15:01.000Z",
+   "endTime": "2026-05-01T14:15:03.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Planner of a travel-booking assistant. Read the user's request, decide which apps are needed and list the steps in order. Available apps: flights, hotels, payments, calendar.\nAnswer with JSON only: {\"intent\": string, \"required_apps\": [string], \"steps\": [{\"action\": string, \"app\": string}]}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Find a flight from Seattle to San Francisco on 9 July and book it."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"intent\": \"Find a flight from Seattle to San Francisco on 9 July and book it\", \"required_apps\": [\"flights\", \"payments\"], \"steps\": [{\"action\": \"search flights\", \"app\": \"flights\"}, {\"action\": \"book flight\", \"app\": \"flights\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]}"
+   },
+   "metadata": {
+    "langgraph_node": "planner",
+    "langgraph_step": 1
+   }
+  },
+  {
+   "id": "flight-sea-sfo-fail-1-gen-2",
+   "type": "GENERATION",
+   "name": "ToolSelector",
+   "model": "toy-model",
+   "startTime": "2026-05-01T14:15:04.000Z",
+   "endTime": "2026-05-01T14:15:06.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the ToolSelector of a travel-booking assistant. Given the plan, choose every tool the Executor will need to carry it out. Tools: flights.search, flights.book, hotels.search, hotels.book, payments.charge, calendar.add_event.\nAnswer with JSON only: {\"selected_tools\": [string], \"reasoning\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan: [{\"action\": \"search flights\", \"app\": \"flights\"}, {\"action\": \"book flight\", \"app\": \"flights\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"selected_tools\": [\"flights.search\", \"flights.book\", \"payments.charge\"], \"reasoning\": \"Search first, then book and pay.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "toolselector",
+    "langgraph_step": 2
+   }
+  },
+  {
+   "id": "flight-sea-sfo-fail-1-gen-3",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T14:15:07.000Z",
+   "endTime": "2026-05-01T14:15:09.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 1. Selected tools: [\"flights.search\", \"flights.book\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"flights.search\", \"arguments\": {\"origin\": \"SEA\", \"destination\": \"SFO\", \"date\": \"07-09\"}, \"note\": \"Several morning flights; AS 330 is first.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 3
+   }
+  },
+  {
+   "id": "flight-sea-sfo-fail-1-tool-3",
+   "type": "SPAN",
+   "name": "tool:flights.search",
+   "startTime": "2026-05-01T14:15:09.500Z",
+   "endTime": "2026-05-01T14:15:10.000Z",
+   "input": {
+    "origin": "SEA",
+    "destination": "SFO",
+    "date": "07-09"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-sea-sfo-fail-1-gen-4",
+   "type": "GENERATION",
+   "name": "Responder",
+   "model": "toy-model",
+   "startTime": "2026-05-01T14:15:11.000Z",
+   "endTime": "2026-05-01T14:15:13.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Responder of a travel-booking assistant. Write the final message to the user, based on the verified results. Be brief and state what was booked and what it cost.\nAnswer with JSON only: {\"answer\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Find a flight from Seattle to San Francisco on 9 July and book it.\nVerification: null"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"answer\": \"AS 330 at 08:15 is the earliest flight from Seattle to San Francisco on 9 July. Shall I book it?\"}"
+   },
+   "metadata": {
+    "langgraph_node": "responder",
+    "langgraph_step": 4
+   }
+  },
+  {
+   "id": "flight-sea-sfo-fail-1-event",
+   "type": "EVENT",
+   "name": "run-finished",
+   "startTime": "2026-05-01T14:15:14.000Z"
+  }
+ ]
+}

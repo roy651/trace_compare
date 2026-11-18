@@ -1,0 +1,107 @@
+[
+  {
+    "comparison": 1,
+    "task": "flight-bos-den",
+    "successful_trace": "flight-bos-den-pass-1",
+    "failed_trace": "flight-bos-den-fail-1",
+    "first_divergence": {
+      "step": 2,
+      "component": "ToolSelector",
+      "failed_fields": [
+        {
+          "field": "selected_tools",
+          "mode": "exact_match"
+        }
+      ]
+    },
+    "end_state": "Both traces completed"
+  },
+  {
+    "comparison": 2,
+    "task": "flight-lon-tyo",
+    "successful_trace": "flight-lon-tyo-pass-1",
+    "failed_trace": "flight-lon-tyo-fail-1",
+    "first_divergence": {
+      "step": 2,
+      "component": "ToolSelector",
+      "failed_fields": [
+        {
+          "field": "selected_tools",
+          "mode": "exact_match"
+        }
+      ]
+    },
+    "end_state": "Final divergence: Failed trace completed"
+  },
+  {
+    "comparison": 3,
+    "task": "flight-sea-sfo",
+    "successful_trace": "flight-sea-sfo-pass-1",
+    "failed_trace": "flight-sea-sfo-fail-1",
+    "first_divergence": null,
+    "end_state": "Final divergence: different agents are called for the two traces"
+  },
+  {
+    "comparison": 4,
+    "task": "hotel-austin-calendar",
+    "successful_trace": "hotel-austin-calendar-pass-2",
+    "failed_trace": "hotel-austin-calendar-fail-2",
+    "first_divergence": {
+      "step": 1,
+      "component": "Planner",
+      "failed_fields": [
+        {
+          "field": "required_apps",
+          "mode": "exact_match"
+        },
+        {
+          "field": "steps",
+          "mode": "list_length"
+        },
+        {
+          "field": "steps[].app",
+          "mode": "exact_match"
+        }
+      ]
+    },
+    "end_state": "Both traces completed"
+  },
+  {
+    "comparison": 5,
+    "task": "hotel-paris",
+    "successful_trace": "hotel-paris-pass-1",
+    "failed_trace": "hotel-paris-fail-1",
+    "first_divergence": {
+      "step": 2,
+      "component": "ToolSelector",
+      "failed_fields": [
+        {
+          "field": "selected_tools",
+          "mode": "exact_match"
+        }
+      ]
+    },
+    "end_state": "Both traces completed"
+  },
+  {
+    "comparison": 6,
+    "task": "trip-chicago",
+    "successful_trace": "trip-chicago-pass-1",
+    "failed_trace": "trip-chicago-fail-1",
+    "first_divergence": {
+      "step": 1,
+      "component": "Planner",
+      "failed_fields": [
+        {
+          "field": "required_apps",
+          "mode": "exact_match"
+        },
+        {
+          "field": "steps[].app",
+          "mode": "exact_match"
+        }
+      ]
+    },
+    "end_state": "Both traces completed"
+  }
+]

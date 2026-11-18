@@ -1,0 +1,253 @@
+{
+ "id": "hotel-paris-fail-1",
+ "name": "travel-assistant",
+ "timestamp": "2026-05-01T10:15:00.000Z",
+ "input": [
+  {
+   "role": "user",
+   "content": "Book a hotel near the Louvre in Paris for two nights from 12 August."
+  }
+ ],
+ "observations": [
+  {
+   "id": "hotel-paris-fail-1-root",
+   "type": "SPAN",
+   "name": "travel-assistant",
+   "startTime": "2026-05-01T10:15:00.000Z",
+   "endTime": "2026-05-01T10:15:25.000Z"
+  },
+  {
+   "id": "hotel-paris-fail-1-gen-1",
+   "type": "GENERATION",
+   "name": "Planner",
+   "model": "toy-model",
+   "startTime": "2026-05-01T10:15:01.000Z",
+   "endTime": "2026-05-01T10:15:03.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Planner of a travel-booking assistant. Read the user's request, decide which apps are needed and list the steps in order. Available apps: flights, hotels, payments, calendar.\nAnswer with JSON only: {\"intent\": string, \"required_apps\": [string], \"steps\": [{\"action\": string, \"app\": string}]}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book a hotel near the Louvre in Paris for two nights from 12 August."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"intent\": \"Book a hotel close to the Louvre, Paris, two nights from 12 August\", \"required_apps\": [\"hotels\", \"payments\"], \"steps\": [{\"action\": \"search hotels\", \"app\": \"hotels\"}, {\"action\": \"book hotel\", \"app\": \"hotels\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]}"
+   },
+   "metadata": {
+    "langgraph_node": "planner",
+    "langgraph_step": 1
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-gen-2",
+   "type": "GENERATION",
+   "name": "ToolSelector",
+   "model": "toy-model",
+   "startTime": "2026-05-01T10:15:04.000Z",
+   "endTime": "2026-05-01T10:15:06.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the ToolSelector of a travel-booking assistant. Given the plan, choose every tool the Executor will need to carry it out. Tools: flights.search, flights.book, hotels.search, hotels.book, payments.charge, calendar.add_event.\nAnswer with JSON only: {\"selected_tools\": [string], \"reasoning\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan: [{\"action\": \"search hotels\", \"app\": \"hotels\"}, {\"action\": \"book hotel\", \"app\": \"hotels\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"selected_tools\": [\"hotels.search\", \"payments.charge\"], \"reasoning\": \"Search hotels and pay.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "toolselector",
+    "langgraph_step": 2
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-gen-3",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T10:15:07.000Z",
+   "endTime": "2026-05-01T10:15:09.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 1. Selected tools: [\"hotels.search\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"hotels.search\", \"arguments\": {\"city\": \"Paris\", \"near\": \"Louvre\", \"nights\": 2}, \"note\": \"Hotel du Palais looks best.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 3
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-tool-3",
+   "type": "SPAN",
+   "name": "tool:hotels.search",
+   "startTime": "2026-05-01T10:15:09.500Z",
+   "endTime": "2026-05-01T10:15:10.000Z",
+   "input": {
+    "city": "Paris",
+    "near": "Louvre",
+    "nights": 2
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-gen-4",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T10:15:11.000Z",
+   "endTime": "2026-05-01T10:15:13.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 2. Selected tools: [\"hotels.search\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"hotels.search\", \"arguments\": {\"city\": \"Paris\", \"near\": \"Louvre\", \"nights\": 2, \"refundable\": true}, \"note\": \"Cannot reserve without a booking tool; searching again.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 4
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-tool-4",
+   "type": "SPAN",
+   "name": "tool:hotels.search",
+   "startTime": "2026-05-01T10:15:13.500Z",
+   "endTime": "2026-05-01T10:15:14.000Z",
+   "input": {
+    "city": "Paris",
+    "near": "Louvre",
+    "nights": 2,
+    "refundable": true
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-gen-5",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T10:15:15.000Z",
+   "endTime": "2026-05-01T10:15:17.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 3. Selected tools: [\"hotels.search\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"payments.charge\", \"arguments\": {\"amount\": 418.0, \"currency\": \"EUR\"}, \"note\": \"Card charged.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 5
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-tool-5",
+   "type": "SPAN",
+   "name": "tool:payments.charge",
+   "startTime": "2026-05-01T10:15:17.500Z",
+   "endTime": "2026-05-01T10:15:18.000Z",
+   "input": {
+    "amount": 418.0,
+    "currency": "EUR"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-gen-6",
+   "type": "GENERATION",
+   "name": "Verifier",
+   "model": "toy-model",
+   "startTime": "2026-05-01T10:15:19.000Z",
+   "endTime": "2026-05-01T10:15:21.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Verifier of a travel-booking assistant. Check the tool results against the user's request and report whether the request is fully done.\nAnswer with JSON only: {\"status\": \"ok\" | \"failed\", \"amount\": number, \"issues\": [string]} (omit \"issues\" when there are none)\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book a hotel near the Louvre in Paris for two nights from 12 August.\nTool results are in the conversation above."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"status\": \"failed\", \"amount\": 418.0, \"issues\": [\"payment taken but no reservation exists\"]}"
+   },
+   "metadata": {
+    "langgraph_node": "verifier",
+    "langgraph_step": 6
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-gen-7",
+   "type": "GENERATION",
+   "name": "Responder",
+   "model": "toy-model",
+   "startTime": "2026-05-01T10:15:22.000Z",
+   "endTime": "2026-05-01T10:15:24.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Responder of a travel-booking assistant. Write the final message to the user, based on the verified results. Be brief and state what was booked and what it cost.\nAnswer with JSON only: {\"answer\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book a hotel near the Louvre in Paris for two nights from 12 August.\nVerification: {\"status\": \"failed\", \"amount\": 418.0, \"issues\": [\"payment taken but no reservation exists\"]}"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"answer\": \"Payment of 418.00 EUR went through, but the room is not reserved.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "responder",
+    "langgraph_step": 7
+   }
+  },
+  {
+   "id": "hotel-paris-fail-1-event",
+   "type": "EVENT",
+   "name": "run-finished",
+   "startTime": "2026-05-01T10:15:25.000Z"
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+[
+    {"agent_name": "Task Analyzer", "system_prompt": "prompts/app_matcher_system.jinja2"},
+    {"agent_name": "Task Decomposition", "system_prompt": "prompts/task_decomposition_system.jinja2"},
+    {"agent_name": "Plan Controller", "system_prompt": "prompts/plan_controller_system.jinja2"},
+    {"agent_name": "Code Agent", "system_prompt": "prompts/mcp_prompt.jinja2", "normalizer": "extract_code_agent_content"},
+    {"agent_name": "Reflection", "system_prompt": "prompts/reflection_system.jinja2", "normalizer": "extract_reflection_fields_v2"},
+    {"agent_name": "Shortlister", "system_prompt": "prompts/shortlister_system.jinja2"},
+    {"agent_name": "Final Answer", "system_prompt": "prompts/final_answer_system_appworld.jinja2"}
+]

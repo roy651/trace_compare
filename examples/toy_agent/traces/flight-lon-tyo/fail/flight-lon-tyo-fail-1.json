@@ -1,0 +1,160 @@
+{
+ "id": "flight-lon-tyo-fail-1",
+ "name": "travel-assistant",
+ "timestamp": "2026-05-01T11:15:00.000Z",
+ "input": [
+  {
+   "role": "user",
+   "content": "Book a flight from London to Tokyo on 20 September."
+  }
+ ],
+ "observations": [
+  {
+   "id": "flight-lon-tyo-fail-1-root",
+   "type": "SPAN",
+   "name": "travel-assistant",
+   "startTime": "2026-05-01T11:15:00.000Z",
+   "endTime": "2026-05-01T11:15:15.000Z"
+  },
+  {
+   "id": "flight-lon-tyo-fail-1-gen-1",
+   "type": "GENERATION",
+   "name": "Planner",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:15:01.000Z",
+   "endTime": "2026-05-01T11:15:03.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Planner of a travel-booking assistant. Read the user's request, decide which apps are needed and list the steps in order. Available apps: flights, hotels, payments, calendar.\nAnswer with JSON only: {\"intent\": string, \"required_apps\": [string], \"steps\": [{\"action\": string, \"app\": string}]}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book a flight from London to Tokyo on 20 September."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"intent\": \"Book a flight London to Tokyo on 20 September\", \"required_apps\": [\"flights\", \"payments\"], \"steps\": [{\"action\": \"search flights\", \"app\": \"flights\"}, {\"action\": \"book flight\", \"app\": \"flights\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]}"
+   },
+   "metadata": {
+    "langgraph_node": "planner",
+    "langgraph_step": 1
+   }
+  },
+  {
+   "id": "flight-lon-tyo-fail-1-gen-2",
+   "type": "GENERATION",
+   "name": "ToolSelector",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:15:04.000Z",
+   "endTime": "2026-05-01T11:15:06.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the ToolSelector of a travel-booking assistant. Given the plan, choose every tool the Executor will need to carry it out. Tools: flights.search, flights.book, hotels.search, hotels.book, payments.charge, calendar.add_event.\nAnswer with JSON only: {\"selected_tools\": [string], \"reasoning\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan: [{\"action\": \"search flights\", \"app\": \"flights\"}, {\"action\": \"book flight\", \"app\": \"flights\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"selected_tools\": [\"flights.search\", \"payments.charge\"], \"reasoning\": \"Search and pay.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "toolselector",
+    "langgraph_step": 2
+   }
+  },
+  {
+   "id": "flight-lon-tyo-fail-1-gen-3",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:15:07.000Z",
+   "endTime": "2026-05-01T11:15:09.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 1. Selected tools: [\"flights.search\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"flights.search\", \"arguments\": {\"origin\": \"LHR\", \"destination\": \"HND\", \"date\": \"09-20\"}, \"note\": \"JL 44 departs 09:30.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 3
+   }
+  },
+  {
+   "id": "flight-lon-tyo-fail-1-tool-3",
+   "type": "SPAN",
+   "name": "tool:flights.search",
+   "startTime": "2026-05-01T11:15:09.500Z",
+   "endTime": "2026-05-01T11:15:10.000Z",
+   "input": {
+    "origin": "LHR",
+    "destination": "HND",
+    "date": "09-20"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-lon-tyo-fail-1-gen-4",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:15:11.000Z",
+   "endTime": "2026-05-01T11:15:13.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 2. Selected tools: [\"flights.search\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"flights.search\", \"arguments\": {\"origin\": \"LHR\", \"destination\": \"NRT\", \"date\": \"09-20\"}, \"note\": \"Trying another airport; still no way to book.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 4
+   }
+  },
+  {
+   "id": "flight-lon-tyo-fail-1-tool-4",
+   "type": "SPAN",
+   "name": "tool:flights.search",
+   "startTime": "2026-05-01T11:15:13.500Z",
+   "endTime": "2026-05-01T11:15:14.000Z",
+   "input": {
+    "origin": "LHR",
+    "destination": "NRT",
+    "date": "09-20"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-lon-tyo-fail-1-event",
+   "type": "EVENT",
+   "name": "run-finished",
+   "startTime": "2026-05-01T11:15:15.000Z"
+  }
+ ]
+}

@@ -1,0 +1,103 @@
+{
+    "agent_name": "Planner",
+    "output_schema": {
+        "intent": "string - the request in one sentence",
+        "required_apps": [
+            "string - app name"
+        ],
+        "steps": [
+            {
+                "action": "string",
+                "app": "string - app name"
+            }
+        ]
+    },
+    "fields": [
+        {
+            "schema_field_name": "intent",
+            "comparison_mode": "fuzzy_match"
+        },
+        {
+            "schema_field_name": "required_apps",
+            "comparison_mode": "exact_match"
+        },
+        {
+            "schema_field_name": "steps",
+            "comparison_mode": "list_length"
+        },
+        {
+            "schema_field_name": "steps[].app",
+            "comparison_mode": "exact_match"
+        }
+    ]
+}
+
+{
+    "agent_name": "ToolSelector",
+    "output_schema": {
+        "selected_tools": [
+            "string - tool name"
+        ],
+        "reasoning": "string"
+    },
+    "fields": [
+        {
+            "schema_field_name": "selected_tools",
+            "comparison_mode": "exact_match"
+        }
+    ]
+}
+
+{
+    "agent_name": "Executor",
+    "output_schema": {
+        "tool": "string - tool name",
+        "arguments": {},
+        "note": "string"
+    },
+    "fields": [
+        {
+            "schema_field_name": "tool",
+            "comparison_mode": "exact_match"
+        }
+    ]
+}
+
+{
+    "agent_name": "Verifier",
+    "output_schema": {
+        "status": "ok | failed",
+        "amount": 0.0,
+        "issues": [
+            "string - optional"
+        ]
+    },
+    "fields": [
+        {
+            "schema_field_name": "status",
+            "comparison_mode": "exact_match"
+        },
+        {
+            "schema_field_name": "amount",
+            "comparison_mode": "approximate_numeric"
+        },
+        {
+            "schema_field_name": "issues",
+            "comparison_mode": "field_exists"
+        }
+    ]
+}
+
+{
+    "agent_name": "Responder",
+    "output_schema": {
+        "answer": "string - message to the user"
+    },
+    "fields": [
+        {
+            "schema_field_name": "answer",
+            "comparison_mode": "fuzzy_match"
+        }
+    ]
+}
+

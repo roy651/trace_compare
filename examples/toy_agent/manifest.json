@@ -1,0 +1,22 @@
+[
+    {
+        "agent_name": "Planner",
+        "system_prompt": "prompts/planner.txt"
+    },
+    {
+        "agent_name": "ToolSelector",
+        "system_prompt": "prompts/toolselector.txt"
+    },
+    {
+        "agent_name": "Executor",
+        "system_prompt": "prompts/executor.txt"
+    },
+    {
+        "agent_name": "Verifier",
+        "system_prompt": "prompts/verifier.txt"
+    },
+    {
+        "agent_name": "Responder",
+        "system_prompt": "prompts/responder.txt"
+    }
+]

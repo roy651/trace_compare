@@ -1,0 +1,253 @@
+{
+ "id": "flight-bos-den-fail-1",
+ "name": "travel-assistant",
+ "timestamp": "2026-05-01T09:15:00.000Z",
+ "input": [
+  {
+   "role": "user",
+   "content": "Book the cheapest flight from Boston to Denver on 3 May for one adult."
+  }
+ ],
+ "observations": [
+  {
+   "id": "flight-bos-den-fail-1-root",
+   "type": "SPAN",
+   "name": "travel-assistant",
+   "startTime": "2026-05-01T09:15:00.000Z",
+   "endTime": "2026-05-01T09:15:25.000Z"
+  },
+  {
+   "id": "flight-bos-den-fail-1-gen-1",
+   "type": "GENERATION",
+   "name": "Planner",
+   "model": "toy-model",
+   "startTime": "2026-05-01T09:15:01.000Z",
+   "endTime": "2026-05-01T09:15:03.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Planner of a travel-booking assistant. Read the user's request, decide which apps are needed and list the steps in order. Available apps: flights, hotels, payments, calendar.\nAnswer with JSON only: {\"intent\": string, \"required_apps\": [string], \"steps\": [{\"action\": string, \"app\": string}]}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book the cheapest flight from Boston to Denver on 3 May for one adult."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"intent\": \"Book cheapest flight Boston to Denver, 3 May, one adult\", \"required_apps\": [\"flights\", \"payments\"], \"steps\": [{\"action\": \"search flights\", \"app\": \"flights\"}, {\"action\": \"book flight\", \"app\": \"flights\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]}"
+   },
+   "metadata": {
+    "langgraph_node": "planner",
+    "langgraph_step": 1
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-gen-2",
+   "type": "GENERATION",
+   "name": "ToolSelector",
+   "model": "toy-model",
+   "startTime": "2026-05-01T09:15:04.000Z",
+   "endTime": "2026-05-01T09:15:06.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the ToolSelector of a travel-booking assistant. Given the plan, choose every tool the Executor will need to carry it out. Tools: flights.search, flights.book, hotels.search, hotels.book, payments.charge, calendar.add_event.\nAnswer with JSON only: {\"selected_tools\": [string], \"reasoning\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan: [{\"action\": \"search flights\", \"app\": \"flights\"}, {\"action\": \"book flight\", \"app\": \"flights\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"selected_tools\": [\"flights.search\", \"payments.charge\"], \"reasoning\": \"Find the fare and pay for it.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "toolselector",
+    "langgraph_step": 2
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-gen-3",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T09:15:07.000Z",
+   "endTime": "2026-05-01T09:15:09.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 1. Selected tools: [\"flights.search\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"flights.search\", \"arguments\": {\"origin\": \"BOS\", \"destination\": \"DEN\", \"date\": \"05-03\"}, \"note\": \"UA 1432 is the cheapest fare.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 3
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-tool-3",
+   "type": "SPAN",
+   "name": "tool:flights.search",
+   "startTime": "2026-05-01T09:15:09.500Z",
+   "endTime": "2026-05-01T09:15:10.000Z",
+   "input": {
+    "origin": "BOS",
+    "destination": "DEN",
+    "date": "05-03"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-gen-4",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T09:15:11.000Z",
+   "endTime": "2026-05-01T09:15:13.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 2. Selected tools: [\"flights.search\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"flights.search\", \"arguments\": {\"origin\": \"BOS\", \"destination\": \"DEN\", \"date\": \"05-03\", \"sort\": \"price\"}, \"note\": \"No booking tool available; searching again.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 4
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-tool-4",
+   "type": "SPAN",
+   "name": "tool:flights.search",
+   "startTime": "2026-05-01T09:15:13.500Z",
+   "endTime": "2026-05-01T09:15:14.000Z",
+   "input": {
+    "origin": "BOS",
+    "destination": "DEN",
+    "date": "05-03",
+    "sort": "price"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-gen-5",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T09:15:15.000Z",
+   "endTime": "2026-05-01T09:15:17.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 3. Selected tools: [\"flights.search\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"payments.charge\", \"arguments\": {\"amount\": 212.4, \"currency\": \"USD\"}, \"note\": \"Card charged.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 5
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-tool-5",
+   "type": "SPAN",
+   "name": "tool:payments.charge",
+   "startTime": "2026-05-01T09:15:17.500Z",
+   "endTime": "2026-05-01T09:15:18.000Z",
+   "input": {
+    "amount": 212.4,
+    "currency": "USD"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-gen-6",
+   "type": "GENERATION",
+   "name": "Verifier",
+   "model": "toy-model",
+   "startTime": "2026-05-01T09:15:19.000Z",
+   "endTime": "2026-05-01T09:15:21.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Verifier of a travel-booking assistant. Check the tool results against the user's request and report whether the request is fully done.\nAnswer with JSON only: {\"status\": \"ok\" | \"failed\", \"amount\": number, \"issues\": [string]} (omit \"issues\" when there are none)\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book the cheapest flight from Boston to Denver on 3 May for one adult.\nTool results are in the conversation above."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"status\": \"failed\", \"amount\": 212.4, \"issues\": [\"card charged but no booking reference\"]}"
+   },
+   "metadata": {
+    "langgraph_node": "verifier",
+    "langgraph_step": 6
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-gen-7",
+   "type": "GENERATION",
+   "name": "Responder",
+   "model": "toy-model",
+   "startTime": "2026-05-01T09:15:22.000Z",
+   "endTime": "2026-05-01T09:15:24.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Responder of a travel-booking assistant. Write the final message to the user, based on the verified results. Be brief and state what was booked and what it cost.\nAnswer with JSON only: {\"answer\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book the cheapest flight from Boston to Denver on 3 May for one adult.\nVerification: {\"status\": \"failed\", \"amount\": 212.4, \"issues\": [\"card charged but no booking reference\"]}"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"answer\": \"I charged 212.40 USD but could not confirm a booking for UA 1432.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "responder",
+    "langgraph_step": 7
+   }
+  },
+  {
+   "id": "flight-bos-den-fail-1-event",
+   "type": "EVENT",
+   "name": "run-finished",
+   "startTime": "2026-05-01T09:15:25.000Z"
+  }
+ ]
+}

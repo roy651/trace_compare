@@ -1,0 +1,251 @@
+{
+ "id": "flight-lon-tyo-pass-1",
+ "name": "travel-assistant",
+ "timestamp": "2026-05-01T11:10:00.000Z",
+ "input": [
+  {
+   "role": "user",
+   "content": "Book a flight from London to Tokyo on 20 September."
+  }
+ ],
+ "observations": [
+  {
+   "id": "flight-lon-tyo-pass-1-root",
+   "type": "SPAN",
+   "name": "travel-assistant",
+   "startTime": "2026-05-01T11:10:00.000Z",
+   "endTime": "2026-05-01T11:10:25.000Z"
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-gen-1",
+   "type": "GENERATION",
+   "name": "Planner",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:10:01.000Z",
+   "endTime": "2026-05-01T11:10:03.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Planner of a travel-booking assistant. Read the user's request, decide which apps are needed and list the steps in order. Available apps: flights, hotels, payments, calendar.\nAnswer with JSON only: {\"intent\": string, \"required_apps\": [string], \"steps\": [{\"action\": string, \"app\": string}]}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book a flight from London to Tokyo on 20 September."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"intent\": \"Book a flight from London to Tokyo on 20 September\", \"required_apps\": [\"flights\", \"payments\"], \"steps\": [{\"action\": \"search flights\", \"app\": \"flights\"}, {\"action\": \"book flight\", \"app\": \"flights\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]}"
+   },
+   "metadata": {
+    "langgraph_node": "planner",
+    "langgraph_step": 1
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-gen-2",
+   "type": "GENERATION",
+   "name": "ToolSelector",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:10:04.000Z",
+   "endTime": "2026-05-01T11:10:06.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the ToolSelector of a travel-booking assistant. Given the plan, choose every tool the Executor will need to carry it out. Tools: flights.search, flights.book, hotels.search, hotels.book, payments.charge, calendar.add_event.\nAnswer with JSON only: {\"selected_tools\": [string], \"reasoning\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan: [{\"action\": \"search flights\", \"app\": \"flights\"}, {\"action\": \"book flight\", \"app\": \"flights\"}, {\"action\": \"charge card\", \"app\": \"payments\"}]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"selected_tools\": [\"flights.search\", \"flights.book\", \"payments.charge\"], \"reasoning\": \"Search, book and pay.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "toolselector",
+    "langgraph_step": 2
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-gen-3",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:10:07.000Z",
+   "endTime": "2026-05-01T11:10:09.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 1. Selected tools: [\"flights.search\", \"flights.book\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"flights.search\", \"arguments\": {\"origin\": \"LHR\", \"destination\": \"HND\", \"date\": \"09-20\"}, \"note\": \"JL 44 departs 09:30.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 3
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-tool-3",
+   "type": "SPAN",
+   "name": "tool:flights.search",
+   "startTime": "2026-05-01T11:10:09.500Z",
+   "endTime": "2026-05-01T11:10:10.000Z",
+   "input": {
+    "origin": "LHR",
+    "destination": "HND",
+    "date": "09-20"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-gen-4",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:10:11.000Z",
+   "endTime": "2026-05-01T11:10:13.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 2. Selected tools: [\"flights.search\", \"flights.book\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"flights.book\", \"arguments\": {\"flight_id\": \"JL44\", \"passengers\": 1}, \"note\": \"Seat held.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 4
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-tool-4",
+   "type": "SPAN",
+   "name": "tool:flights.book",
+   "startTime": "2026-05-01T11:10:13.500Z",
+   "endTime": "2026-05-01T11:10:14.000Z",
+   "input": {
+    "flight_id": "JL44",
+    "passengers": 1
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-gen-5",
+   "type": "GENERATION",
+   "name": "Executor",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:10:15.000Z",
+   "endTime": "2026-05-01T11:10:17.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Executor of a travel-booking assistant. Call exactly one of the selected tools for the current plan step, using results from earlier steps.\nAnswer with JSON only: {\"tool\": string, \"arguments\": object, \"note\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Plan step 3. Selected tools: [\"flights.search\", \"flights.book\", \"payments.charge\"]"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"tool\": \"payments.charge\", \"arguments\": {\"amount\": 864.1, \"currency\": \"GBP\"}, \"note\": \"Card charged.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "executor",
+    "langgraph_step": 5
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-tool-5",
+   "type": "SPAN",
+   "name": "tool:payments.charge",
+   "startTime": "2026-05-01T11:10:17.500Z",
+   "endTime": "2026-05-01T11:10:18.000Z",
+   "input": {
+    "amount": 864.1,
+    "currency": "GBP"
+   },
+   "output": {
+    "ok": true
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-gen-6",
+   "type": "GENERATION",
+   "name": "Verifier",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:10:19.000Z",
+   "endTime": "2026-05-01T11:10:21.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Verifier of a travel-booking assistant. Check the tool results against the user's request and report whether the request is fully done.\nAnswer with JSON only: {\"status\": \"ok\" | \"failed\", \"amount\": number, \"issues\": [string]} (omit \"issues\" when there are none)\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book a flight from London to Tokyo on 20 September.\nTool results are in the conversation above."
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"status\": \"ok\", \"amount\": 864.1}"
+   },
+   "metadata": {
+    "langgraph_node": "verifier",
+    "langgraph_step": 6
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-gen-7",
+   "type": "GENERATION",
+   "name": "Responder",
+   "model": "toy-model",
+   "startTime": "2026-05-01T11:10:22.000Z",
+   "endTime": "2026-05-01T11:10:24.000Z",
+   "input": [
+    {
+     "role": "system",
+     "content": "You are the Responder of a travel-booking assistant. Write the final message to the user, based on the verified results. Be brief and state what was booked and what it cost.\nAnswer with JSON only: {\"answer\": string}\n"
+    },
+    {
+     "role": "user",
+     "content": "Request: Book a flight from London to Tokyo on 20 September.\nVerification: {\"status\": \"ok\", \"amount\": 864.1}"
+    }
+   ],
+   "output": {
+    "role": "assistant",
+    "content": "{\"answer\": \"Booked JL 44 from London to Tokyo on 20 September for 864.10 GBP.\"}"
+   },
+   "metadata": {
+    "langgraph_node": "responder",
+    "langgraph_step": 7
+   }
+  },
+  {
+   "id": "flight-lon-tyo-pass-1-event",
+   "type": "EVENT",
+   "name": "run-finished",
+   "startTime": "2026-05-01T11:10:25.000Z"
+  }
+ ]
+}
