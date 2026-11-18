@@ -17,6 +17,9 @@ dependencies = [
     "python-dotenv",
 ]
 
+[project.urls]
+Repository = "https://github.com/roy651/trace_compare"
+
 [project.optional-dependencies]
 semantic = ["sentence-transformers"]
 dev = ["pytest", "ruff"]

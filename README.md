@@ -9,6 +9,7 @@
 <p align="center">
   <img alt="Paper: IAAI (accepted)" src="https://img.shields.io/badge/Paper-IAAI%20(accepted)-B31B1B.svg">
   <a href="LICENSE"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"></a>
+  <a href="https://github.com/roy651/trace_compare/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/roy651/trace_compare/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/Python-3.10+-3776AB.svg">
   <img alt="Demo needs no API key" src="https://img.shields.io/badge/Demo-no%20API%20key-2ea44f.svg">
 </p>
@@ -34,7 +35,7 @@ it, and pools those divergences across many runs into failure clusters with prop
 No API key, no GPU, under a minute:
 
 ```bash
-git clone <repo-url> trace-compare && cd trace-compare
+git clone https://github.com/roy651/trace_compare.git && cd trace_compare
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
 trace-compare demo
@@ -117,12 +118,13 @@ Comparison modes:
 its system prompt, and a short `system_description.md`. Copy
 [`examples/toy_agent`](examples/toy_agent) as a starting point.
 
-**2. Generate comparison rules** (one LLM call per component; any
-[LiteLLM](https://docs.litellm.ai/) model string works):
+**2. Generate comparison rules** (one LLM call per component). Any provider supported by
+[LiteLLM](https://docs.litellm.ai/docs/providers) works: Anthropic, OpenAI, Azure, Bedrock,
+watsonx, Gemini, or an OpenAI-compatible endpoint of your own.
 
 ```bash
-export ANTHROPIC_API_KEY=...
-trace-compare design-rules --agent my_agent/ --model anthropic/claude-opus-4-6
+cp .env.example .env      # set LLM_MODEL and your provider's key
+trace-compare design-rules --agent my_agent/
 ```
 
 This writes `my_agent/rules.txt`. Read it and edit it; it is plain JSON.
@@ -147,7 +149,7 @@ record per pair). `--pairing-mode` selects one pair per task (default), `n_pairs
 **5. Diagnose** (one LLM call over the whole report):
 
 ```bash
-trace-compare diagnose --report out/step_comparison.md --agent my_agent/ --model anthropic/claude-opus-4-6
+trace-compare diagnose --report out/step_comparison.md --agent my_agent/
 ```
 
 This writes `out/summary.md` with clusters, root causes and recommendations. On CUGA and AppWorld, an
@@ -163,7 +165,8 @@ In successful traces, the CodeAgent's tool discovery output is first evaluated b
 agent before proceeding. This pattern appears in 12+ comparisons ...
 ```
 
-Semantic similarity needs an embedding model: `pip install -e ".[semantic]"`.
+`--model` overrides `LLM_MODEL` for a single run. Semantic similarity needs an embedding model:
+`pip install -e ".[semantic]"`.
 
 ## Paper to code
 
@@ -219,7 +222,9 @@ ruff check
 ```
 
 The test suite includes golden reports produced by the original implementation in cuga-eval; this
-package reproduces them byte for byte.
+package reproduces them byte for byte. Three small defects of the original are fixed here: `exact_match`
+no longer treats `True` and `1` as equal, an empty output of the failed run is now reported, and
+`design-rules` accepts a fenced reply that ends in a newline.
 
 ## Notes on the implementation
 
